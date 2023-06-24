@@ -1,4 +1,4 @@
-from src.api import SJApi, HHApi
+from src.api import SJApi, HHApi, BaseApi
 import pytest
 
 
@@ -27,3 +27,13 @@ def test_hh_api():
     hh = HHApi()
     data = hh.get_vacancies()
     assert data is not None
+
+
+def test_base_api():
+    class Tmp(BaseApi):
+        def __init__(self):
+            super().__init__()
+
+    tmp = Tmp()
+    assert tmp.url is None
+    assert tmp.headers is None

@@ -15,6 +15,8 @@ class BaseApi(ABC):
         self.headers: dict подлежат обязательному
         определению в потомках.
         """
+        self.url = None
+        self.headers = None
 
     def get_vacancies(self, params_to_search: dict = None) -> str:
         """
