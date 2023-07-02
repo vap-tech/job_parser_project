@@ -64,4 +64,4 @@ class HHApi(BaseApi):
             'User-Agent': 'api-test-agent'
         }
 
-        self.url = 'https://api.hh.ru/vacancies'
+        self.url = 'https://api.hh.ru/vacancies/'
