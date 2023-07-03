@@ -42,9 +42,14 @@ class JsonConnector(Connector):
         Добавляет полученный на вход список объектов класса Vacancy
         к содержимому файла Json
         :param data: Список объектов класса Vacancy
+        ВАЖНО:
+        # Если в функцию передать list и сделать к нему extend
+        # list так же меняется в месте вызова!
         """
-        data.extend(self.get())
-        data = self.list_vacancy_to_str(data)
+
+        new_ = self.get()
+        new_.extend(data)
+        data = self.list_vacancy_to_str(new_)
         with open(self.path, 'w') as f:
             f.write(data)
 

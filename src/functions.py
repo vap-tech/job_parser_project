@@ -77,8 +77,8 @@ def json_collector(count: int) -> list:
     :param count: Количество вакансий
     :return: Массив объектов Vacancy
     """
-    json_cn = JsonConnector(FILENAME)
-    return json_cn.get()[:count]
+    data = JsonConnector(FILENAME).get()
+    return data[:count]
 
 
 def collector(text='Python', area=None, source=0b011, count=50) -> list:
