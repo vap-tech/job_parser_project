@@ -37,11 +37,21 @@ def main():
             break
         print('Неправильный ввод')
 
-    for i in vacancies:
+    print('Сколько вакансий вывести на экран?')
+
+    while True:
+        user_input = int(input(f'от 1 до {count} '))
+        if 0 < user_input <= count:
+            count = user_input
+            break
+        print('Неправильный ввод')
+
+    for i in vacancies[:count]:
         print(i)
 
     jc.add(vacancies)
-    print('\nВакансии так же добавлены в файл Json')
+    print('\nВсе вакансии добавлены в файл Json')
+    print('При следующем запуске можно работать с ними без обращения к API')
 
 
 if __name__ == '__main__':
