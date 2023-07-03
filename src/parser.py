@@ -1,5 +1,6 @@
 from pydantic import BaseModel, HttpUrl
 from typing import Optional
+import bleach
 
 from src.vacancy import Vacancy
 
@@ -10,7 +11,7 @@ class SJVacancy(BaseModel):
     profession: str  # Название вакансии
     date_published: int  # Дата публикации
     compensation: Optional[str] = None  # Условия работы
-    candidat: Optional[str] = None # Требования к кандидату
+    candidat: Optional[str] = None  # Требования к кандидату
     town: dict  # Место расположения
     payment_from: Optional[int] = None  # ЗП от
     payment_to: Optional[int] = None  # ЗП до
@@ -20,7 +21,8 @@ class SJVacancy(BaseModel):
         """
         :return: Объект класса Vacancy
         """
-        return Vacancy(self.id, self.profession, self.link, self.town['title'], self.payment_from, self.candidat)
+        des = bleach.clean(self.candidat,  tags=[], strip=True)
+        return Vacancy(self.id, self.profession, self.link, self.town['title'], self.payment_from, des)
 
 
 class SJBaseModel(BaseModel):
@@ -50,9 +52,16 @@ class HHVacancy(BaseModel):
         """
         :return: Объект класса Vacancy
         """
-        # Если атрибуты None, получение по ключу не удастся
-        pay = self.salary['from'] if self.salary else 0
-        des = self.snippet['responsibility'] if self.snippet else 'Нет описания'
+        # Ищем непустую зарплату
+        pay = 0
+        if self.salary:
+            if self.salary['from']:
+                pay = self.salary['from']
+            elif self.salary['to']:
+                pay = self.salary['to']
+
+        des = "".join([i for i in self.snippet.values() if i])
+        des = bleach.clean(des,  tags=[], strip=True)
         url_ = self.alternate_url if self.alternate_url else "Нет Url'а"
 
         return Vacancy(self.id, self.name, url_, self.area['name'], pay, des)
